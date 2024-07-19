@@ -1,5 +1,6 @@
 {
-  "name": "my-app",
+  "name": "universal-middlewware",
+  "private": true,
   "version": "0.0.1",
   "description": "",
   "type": "module",
@@ -9,7 +10,10 @@
     "dev:hono": "vite --mode hono",
     "dev:hattip": "hattip serve ./playground/hattip-entry.ts --client",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
-    "build": "pnpm run -r build",
+    "build:core": "pnpm run -r --filter \"@universal-middleware/*\" build",
+    "build:plugin": "pnpm run --filter \"universal-middleware\" build",
+    "build:examples": "pnpm run --filter \"@universal-middleware-examples/*\" build",
+    "build": "run-s build:core build:plugin build:examples",
     "test": "pnpm run -r --sequential test",
     "test:typecheck": "pnpm run -r test:typecheck"
   },
@@ -30,7 +34,9 @@
     "express-rate-limit": "^7.3.1",
     "express-session": "^1.18.0",
     "microdiff": "^1.4.0",
+    "npm-run-all2": "^6.2.2",
     "on-change": "^5.0.1",
+    "playwright": "^1.45.2",
     "prettier": "^3.3.2",
     "proxy-deep": "^4.0.1",
     "rfdc": "^1.4.1",
@@ -53,7 +59,11 @@
   },
   "pnpm": {
     "overrides": {
-      "@universal-middleware/core": "link:./packages/core"
+      "@universal-middleware/core": "link:./packages/core",
+      "@universal-middleware/express": "link:./packages/adapter-express",
+      "@universal-middleware/hono": "link:./packages/adapter-hono",
+      "@universal-middleware/hattip": "link:./packages/adapter-hattip",
+      "universal-middleware": "link:./packages/universal-middleware"
     }
   },
   "packageManager": "pnpm@9.4.0"
